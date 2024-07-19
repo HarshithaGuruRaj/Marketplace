@@ -1,17 +1,17 @@
 <div class="card">
     <div class="card-header">
-        Product List
+       {{ pageTitle }}     <!-- This is interpolation --> 
     </div>
     <div class="card-body">
         <div class="row">
             <div class="col-md-2">Filter by:</div>
             <div class="col-md-4">
-                <input type="text" />
+                <input type="text" [(ngModel)]="listFilter" />
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                <h4>Filtered by:</h4>
+                <h4>Filtered by: {{ listFilter }}</h4>
             </div>
         </div>
         <div class="table-responsive">
@@ -19,8 +19,8 @@
                 <thead>
                     <tr>
                         <th>
-                            <button class="btn btn-primary">
-                                Show Image
+                            <button class="btn btn-primary" (click)="toggleImg()">
+                                {{ showImage ? "Hide" : "Show"}} Image
                             </button>
                         </th>
                         <th>Product</th>
@@ -31,12 +31,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor='let prod of products'> 
-                        <td></td>
-                        <td>{{ prod.productName }}</td>
-                        <td>{{ prod.productCode }}</td>
+                    <tr *ngFor='let prod of filteredProducts'> 
+                        <td ><img *ngIf="showImage"
+                                [src] = prod.imageUrl 
+                                [title] = "prod.productName"
+                                [style.width.px]="imageWidth"
+                                [style.margin.px]="imageMargin"  /></td>
+                        <td>{{ prod.productName  }}</td>
+                        <td>{{ prod.productCode | lowercase | convertToSpaces : '-' }}</td>
                         <td>{{ prod.releaseDate }}</td>
-                        <td>{{ prod.price }}</td>
+                        <td>{{ prod.price | currency: 'USD' : 'symbol' : '1.2-2' }}</td>
                         <td>{{ prod.starRating }}</td>
                     </tr>
                 </tbody>
